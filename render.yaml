@@ -37,5 +37,3 @@ services:
         fromSecret: TH_DB_UID
       - key: TH_DB_PASSWORD
         fromSecret: TH_DB_PASSWORD
-    packages:
-      - unixodbc-dev
