@@ -8,7 +8,7 @@ this app uses Docker to build and deploy, and Docker compose for development
 
 it would be faster (and likely easier) to install `requirements.txt` locally on your machine using `pip` to develop, but `compose.yaml` is there just in case as well
 
-to run use `docker compose up` and see at `http://localhost:8000`
+to run use `docker compose up --watch` and see at `http://localhost:8000`
 
 ## endpoints
 
@@ -30,7 +30,7 @@ interface Rankings {
     Rank: number                  // 1-5 if possible, EU only has 2 rn
     Value1: number                // character level, see designs
     szID1: string                 // user name
-    szID2: string                 // number, no idea what this is
+    szID2: string                 // number, used in the char img url but not needed for frontend
   }[]                             // len: 2 - 5 items
 }
 ```
