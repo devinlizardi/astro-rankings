@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: my-flask-app
+    env: python
+    buildCommand: |
+      apt-get update && apt-get install -y unixodbc-dev gcc g++ libpq-dev
+      pip install -r requirements.txt
+    startCommand: python getRanking.py
