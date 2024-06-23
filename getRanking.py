@@ -50,6 +50,10 @@ def fetch_rankings(db_config):
     conn.close()
     return results
 
+@app.route('/')
+def index():
+    return "Welcome to the Ranking API! Use /getRanking to get the rankings."
+
 @app.route('/getRanking', methods=['GET'])
 @cache.cached(timeout=300)  # Cache this view for 5 minutes
 def get_ranking():
