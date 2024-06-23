@@ -3,4 +3,4 @@ pyodbc==5.1.0
 Flask-Caching==2.3.0
 python-dotenv==1.0.1
 Werkzeug==3.0.3
-gunicon==21.0.0
+gunicon==20.1.0
