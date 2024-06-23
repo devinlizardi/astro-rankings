@@ -4,36 +4,5 @@ services:
     env: python
     buildCommand: pip install -r requirements.txt
     startCommand: flask run --host=0.0.0.0 --port=$PORT
-    envVars:
-      - key: NA_DB_SERVER
-        fromSecret: NA_DB_SERVER
-      - key: NA_DB_DATABASE
-        fromSecret: NA_DB_DATABASE
-      - key: NA_DB_UID
-        fromSecret: NA_DB_UID
-      - key: NA_DB_PASSWORD
-        fromSecret: NA_DB_PASSWORD
-      - key: EU_DB_SERVER
-        fromSecret: EU_DB_SERVER
-      - key: EU_DB_DATABASE
-        fromSecret: EU_DB_DATABASE
-      - key: EU_DB_UID
-        fromSecret: EU_DB_UID
-      - key: EU_DB_PASSWORD
-        fromSecret: EU_DB_PASSWORD
-      - key: UAE_DB_SERVER
-        fromSecret: UAE_DB_SERVER
-      - key: UAE_DB_DATABASE
-        fromSecret: UAE_DB_DATABASE
-      - key: UAE_DB_UID
-        fromSecret: UAE_DB_UID
-      - key: UAE_DB_PASSWORD
-        fromSecret: UAE_DB_PASSWORD
-      - key: TH_DB_SERVER
-        fromSecret: TH_DB_SERVER
-      - key: TH_DB_DATABASE
-        fromSecret: TH_DB_DATABASE
-      - key: TH_DB_UID
-        fromSecret: TH_DB_UID
-      - key: TH_DB_PASSWORD
-        fromSecret: TH_DB_PASSWORD
+    packages:
+      - unixodbc-dev
