@@ -2,9 +2,7 @@ services:
   - type: web
     name: getRanking
     env: python
-    buildCommand: |
-      apt-get update && apt-get install -y unixodbc-dev
-      pip install -r requirements.txt
+    buildCommand: pip install -r requirements.txt
     startCommand: flask run --host=0.0.0.0 --port=$PORT
     envVars:
       - key: NA_DB_SERVER
@@ -39,3 +37,5 @@ services:
         fromSecret: TH_DB_UID
       - key: TH_DB_PASSWORD
         fromSecret: TH_DB_PASSWORD
+    packages:
+      - unixodbc-dev
