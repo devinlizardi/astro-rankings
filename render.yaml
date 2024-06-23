@@ -9,6 +9,7 @@ services:
       curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list > /etc/apt/sources.list.d/mssql-release.list
       apt-get update
       ACCEPT_EULA=Y apt-get install -y msodbcsql17
+      ACCEPT_EULA=Y apt-get install -y mssql-tools
       apt-get install -y unixodbc-dev gcc g++ libpq-dev
       pip install -r requirements.txt
     startCommand: flask run --host=0.0.0.0 --port=$PORT
