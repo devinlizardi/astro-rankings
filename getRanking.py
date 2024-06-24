@@ -3,6 +3,7 @@ import pyodbc
 from flask_caching import Cache
 from dotenv import load_dotenv
 import os
+import logging
 
 # Load environment variables from .env file
 load_dotenv()
@@ -12,11 +13,15 @@ app = Flask(__name__)
 # Configure Flask-Caching
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
+# Configure logging
+logging.basicConfig(level=logging.ERROR, filename='app_errors.log', filemode='a',
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
 # Database connection strings with parameters from environment variables
 db_configs = {
     'NA': f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={os.getenv("NA_DB_SERVER")};DATABASE={os.getenv("NA_DB_DATABASE")};UID={os.getenv("NA_DB_UID")};PWD={os.getenv("NA_DB_PASSWORD")}',
     'EU': f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={os.getenv("EU_DB_SERVER")};DATABASE={os.getenv("EU_DB_DATABASE")};UID={os.getenv("EU_DB_UID")};PWD={os.getenv("EU_DB_PASSWORD")}',
-    'NAU': f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={os.getenv("UAE_DB_SERVER")};DATABASE={os.getenv("UAE_DB_DATABASE")};UID={os.getenv("UAE_DB_UID")};PWD={os.getenv("UAE_DB_PASSWORD")}',
+    'UAE': f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={os.getenv("UAE_DB_SERVER")};DATABASE={os.getenv("UAE_DB_DATABASE")};UID={os.getenv("UAE_DB_UID")};PWD={os.getenv("UAE_DB_PASSWORD")}',
     'TH': f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={os.getenv("TH_DB_SERVER")};DATABASE={os.getenv("TH_DB_DATABASE")};UID={os.getenv("TH_DB_UID")};PWD={os.getenv("TH_DB_PASSWORD")}'
 }
 
@@ -40,15 +45,19 @@ WHERE
 """
 
 def fetch_rankings(db_config):
-    conn = pyodbc.connect(db_config)
-    cursor = conn.cursor()
-    cursor.execute(query)
-    columns = [column[0] for column in cursor.description]
-    results = []
-    for row in cursor.fetchall():
-        results.append(dict(zip(columns, row)))
-    conn.close()
-    return results
+    try:
+        conn = pyodbc.connect(db_config)
+        cursor = conn.cursor()
+        cursor.execute(query)
+        columns = [column[0] for column in cursor.description]
+        results = []
+        for row in cursor.fetchall():
+            results.append(dict(zip(columns, row)))
+        conn.close()
+        return results
+    except pyodbc.Error as e:
+        logging.error(f"Error fetching rankings for config {db_config}: {e}")
+        return []
 
 @app.route('/')
 def index():
