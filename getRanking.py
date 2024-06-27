@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, request, jsonify, abort
 import pyodbc
 from flask_caching import Cache
 from dotenv import load_dotenv
@@ -58,6 +58,25 @@ def fetch_rankings(db_config):
     except pyodbc.Error as e:
         logging.error(f"Error fetching rankings for config {db_config}: {e}")
         return []
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    if not request.json:
+        abort(400)  # Abort if no JSON is received
+    data = request.json
+    try:
+        # Extracting the region dropdown value
+        checkout_session = data[0]['raw']['data']['object']
+        custom_fields = checkout_session['custom_fields']
+        region_value = next((item for item in custom_fields if item['key'] == 'region'), None)
+        if region_value:
+            region_value = region_value['dropdown']['value']
+        else:
+            region_value = 'Region not specified'
+        return jsonify({'region': region_value})
+    except (KeyError, TypeError) as e:
+        logging.error(f"Error processing webhook: {e}")
+        return jsonify({'error': 'Error processing data'}), 500
 
 @app.route('/')
 def index():
