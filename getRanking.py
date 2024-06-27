@@ -4,6 +4,7 @@ from flask_caching import Cache
 from dotenv import load_dotenv
 import os
 import logging
+import json
 
 # Load environment variables from .env file
 load_dotenv()
@@ -62,21 +63,37 @@ def fetch_rankings(db_config):
 @app.route('/webhook', methods=['POST'])
 def webhook():
     if not request.json:
-        abort(400)  # Abort if no JSON is received
-    data = request.json
+        abort(400, 'No JSON payload received')
+    
+    # Load the initial JSON payload
+    payload = request.json
+    
     try:
-        # Extracting the region dropdown value
-        checkout_session = data[0]['raw']['data']['object']
+        # Extract the stringified JSON from the 'data' field
+        raw_data = payload[0]['data']
+        data = json.loads(raw_data)  # Parse the stringified JSON into a dictionary
+        
+        # Navigate to the specific 'custom_fields' to extract the 'region' dropdown value
+        checkout_session = data['data']['object']
         custom_fields = checkout_session['custom_fields']
         region_value = next((item for item in custom_fields if item['key'] == 'region'), None)
+        
         if region_value:
             region_value = region_value['dropdown']['value']
         else:
             region_value = 'Region not specified'
+        
         return jsonify({'region': region_value})
-    except (KeyError, TypeError) as e:
-        logging.error(f"Error processing webhook: {e}")
-        return jsonify({'error': 'Error processing data'}), 500
+    
+    except KeyError as e:
+        logging.error(f"Key error in processing the webhook: {e}")
+        abort(400, f"Missing key in JSON data: {str(e)}")
+    except json.JSONDecodeError as e:
+        logging.error(f"JSON decode error: {e}")
+        abort(400, 'Malformed JSON data')
+    except Exception as e:
+        logging.error(f"Unexpected error: {e}")
+        abort(500, f"Server error: {str(e)}")
 
 @app.route('/')
 def index():
