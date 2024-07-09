@@ -110,7 +110,10 @@ def get_ranking():
     all_rankings = {}
     for server, db_config in db_configs.items():
         all_rankings[server] = fetch_rankings(db_config)
-    return jsonify(all_rankings)
+
+    response = jsonify(all_rankings)
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 
 @app.route('/ping', methods=['GET'])
 def ping():
