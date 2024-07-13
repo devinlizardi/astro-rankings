@@ -42,7 +42,7 @@ SELECT
 FROM 
     tbluRanking
 WHERE 
-    Rank BETWEEN 1 AND 5;
+    Rank BETWEEN 1 AND 25;
 """
 
 def fetch_rankings(db_config):
