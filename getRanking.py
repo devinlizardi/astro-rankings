@@ -41,7 +41,7 @@ queries = {
     FROM 
         tbluRanking
     WHERE 
-        Rank BETWEEN 1 AND 5;
+        Rank BETWEEN 1 AND 25;
     """,
     'UAE': """
     SELECT 
@@ -58,7 +58,7 @@ queries = {
     FROM 
         tbluRanking_UAE
     WHERE 
-        Rank BETWEEN 1 AND 5;
+        Rank BETWEEN 1 AND 25;
     """
 }
 
@@ -124,7 +124,7 @@ def index():
     return "Welcome to the Ranking API! Use /getRanking to get the rankings."
 
 @app.route('/getRanking', methods=['GET'])
-@cache.cached(timeout=300)  # Cache this view for 5 minutes
+@cache.cached(timeout=30)  # Cache this view for 5 minutes
 def get_ranking():
     all_rankings = {}
     for server, db_config in db_configs.items():
