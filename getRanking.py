@@ -14,8 +14,7 @@ app = Flask(__name__)
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 # Configure logging
-logging.basicConfig(level=logging.ERROR, filename='app_errors.log', filemode='a',
-                    format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Database connection strings with parameters from environment variables
 db_configs = {
@@ -65,16 +64,17 @@ queries = {
 
 def fetch_rankings(db_config, query):
     try:
-        logging.info(f"Connecting with config: {db_config}")
+        logging.debug(f"Connecting with config: {db_config}")
         conn = pyodbc.connect(db_config)
         cursor = conn.cursor()
-        logging.info(f"Executing query: {query}")
+        logging.debug(f"Executing query: {query}")
         cursor.execute(query)
         columns = [column[0] for column in cursor.description]
         results = []
         for row in cursor.fetchall():
             results.append(dict(zip(columns, row)))
         conn.close()
+        logging.debug(f"Fetched results: {results}")
         return results
     except pyodbc.Error as e:
         logging.error(f"Error fetching rankings for config {db_config}: {e}")
@@ -124,7 +124,7 @@ def index():
     return "Welcome to the Ranking API! Use /getRanking to get the rankings."
 
 @app.route('/getRanking', methods=['GET'])
-@cache.cached(timeout=3)  # Cache this view for 5 minutes
+@cache.cached(timeout=300)  # Cache this view for 5 minutes
 def get_ranking():
     all_rankings = {}
     for server, db_config in db_configs.items():
@@ -132,12 +132,19 @@ def get_ranking():
             query = queries['UAE']
         else:
             query = queries['default']
-        logging.info(f"Fetching rankings for server: {server}")
-        all_rankings[server] = fetch_rankings(db_config, query)
+        logging.debug(f"Fetching rankings for server: {server}")
+        rankings = fetch_rankings(db_config, query)
+        logging.debug(f"Rankings for server {server}: {rankings}")
+        all_rankings[server] = rankings
 
-    response = jsonify(all_rankings)
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    return response
+    response_json = jsonify(all_rankings)
+    response_json.headers.add("Access-Control-Allow-Origin", "*")
+    
+    # Print the response to the console
+    print(response_json.get_json())
+    logging.debug(f"Response: {response_json.get_json()}")
+    
+    return response_json
 
 @app.route('/ping', methods=['GET'])
 def ping():
