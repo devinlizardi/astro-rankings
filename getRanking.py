@@ -4,7 +4,6 @@ from flask_caching import Cache
 from dotenv import load_dotenv
 import os
 import logging
-import json
 
 # Load environment variables from .env file
 load_dotenv()
@@ -22,30 +21,52 @@ logging.basicConfig(level=logging.ERROR, filename='app_errors.log', filemode='a'
 db_configs = {
     'NA': f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={os.getenv("NA_DB_SERVER")};DATABASE={os.getenv("NA_DB_DATABASE")};UID={os.getenv("NA_DB_UID")};PWD={os.getenv("NA_DB_PASSWORD")}',
     'EU': f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={os.getenv("EU_DB_SERVER")};DATABASE={os.getenv("EU_DB_DATABASE")};UID={os.getenv("EU_DB_UID")};PWD={os.getenv("EU_DB_PASSWORD")}',
-    'UAE': f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={os.getenv("UAE_DB_SERVER")};DATABASE={os.getenv("UAE_DB_DATABASE")};UID={os.getenv("UAE_DB_UID")};PWD={os.getenv("UAE_DB_PASSWORD")}',
+    'UAE': f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={os.getenv("NA_DB_SERVER")};DATABASE={os.getenv("NA_DB_DATABASE")};UID={os.getenv("NA_DB_UID")};PWD={os.getenv("NA_DB_PASSWORD")}',
     'TH': f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={os.getenv("TH_DB_SERVER")};DATABASE={os.getenv("TH_DB_DATABASE")};UID={os.getenv("TH_DB_UID")};PWD={os.getenv("TH_DB_PASSWORD")}'
 }
 
-# The query to run
-query = """
-SELECT 
-    Rank,
-    szID1,
-    szID2,
-    Value1,
-    'https://static.latale.com/static/v3/web/img/character/character_' + 
-    CASE 
-        WHEN szID2 = 15 THEN '78'
-        ELSE CAST(szID2 AS VARCHAR(10)) 
-    END + 
-    '.png' AS CharacterImageURL
-FROM 
-    tbluRanking
-WHERE 
-    Rank BETWEEN 1 AND 25;
-"""
+# Queries
+queries = {
+    'default': """
+    SELECT 
+        Rank,
+        szID1,
+        szID2,
+        Value1,
+        'https://static.latale.com/static/v3/web/img/character/character_' + 
+        CASE 
+            WHEN szID2 = 15 THEN '78'
+            ELSE CAST(szID2 AS VARCHAR(10)) 
+        END + 
+        '.png' AS CharacterImageURL
+    FROM 
+        tbluRanking
+    WHERE 
+        Rank BETWEEN 1 AND 5;
+    """,
+    'UAE': """
+    SELECT 
+        Rank,
+        szID1,
+        szID2,
+        Value1,
+        'https://static.latale.com/static/v3/web/img/character/character_' + 
+        CASE 
+            WHEN szID2 = 15 THEN '78'
+            ELSE CAST(szID2 AS VARCHAR(10)) 
+        END + 
+        '.png' AS CharacterImageURL
+    FROM 
+        tbluRanking_UAE
+    WHERE 
+        Rank BETWEEN 1 AND 5;
+    """
+}
 
-def fetch_rankings(db_config):
+def get_query(region):
+    return queries['UAE'] if region == 'UAE' else queries['default']
+
+def fetch_rankings(db_config, query):
     try:
         conn = pyodbc.connect(db_config)
         cursor = conn.cursor()
@@ -59,7 +80,6 @@ def fetch_rankings(db_config):
     except pyodbc.Error as e:
         logging.error(f"Error fetching rankings for config {db_config}: {e}")
         return []
-
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -109,7 +129,8 @@ def index():
 def get_ranking():
     all_rankings = {}
     for server, db_config in db_configs.items():
-        all_rankings[server] = fetch_rankings(db_config)
+        query = get_query(server)
+        all_rankings[server] = fetch_rankings(db_config, query)
 
     response = jsonify(all_rankings)
     response.headers.add("Access-Control-Allow-Origin", "*")
