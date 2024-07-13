@@ -63,13 +63,12 @@ queries = {
     """
 }
 
-def get_query(region):
-    return queries['UAE'] if region == 'UAE' else queries['default']
-
 def fetch_rankings(db_config, query):
     try:
+        logging.info(f"Connecting with config: {db_config}")
         conn = pyodbc.connect(db_config)
         cursor = conn.cursor()
+        logging.info(f"Executing query: {query}")
         cursor.execute(query)
         columns = [column[0] for column in cursor.description]
         results = []
@@ -129,7 +128,11 @@ def index():
 def get_ranking():
     all_rankings = {}
     for server, db_config in db_configs.items():
-        query = get_query(server)
+        if server == 'UAE':
+            query = queries['UAE']
+        else:
+            query = queries['default']
+        logging.info(f"Fetching rankings for server: {server}")
         all_rankings[server] = fetch_rankings(db_config, query)
 
     response = jsonify(all_rankings)
