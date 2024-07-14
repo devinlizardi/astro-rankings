@@ -41,7 +41,7 @@ queries = {
     FROM 
         tbluRanking
     WHERE 
-        Rank BETWEEN 1 AND 5;
+        Rank BETWEEN 1 AND 26;
     """,
     'UAE': """
     SELECT 
@@ -58,7 +58,7 @@ queries = {
     FROM 
         tbluRanking_UAE
     WHERE 
-        Rank BETWEEN 1 AND 5;
+        Rank BETWEEN 1 AND 26;
     """
 }
 
