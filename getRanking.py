@@ -124,7 +124,7 @@ def index():
     return "Welcome to the Ranking API! Use /getRanking to get the rankings."
 
 @app.route('/getRanking', methods=['GET'])
-@cache.cached(timeout=300)  # Cache this view for 5 minutes set to 24h later 86400
+@cache.cached(timeout=86400)  # Cache this view for 5 minutes set to 24h later 86400
 def get_ranking():
     all_rankings = {}
     for server, db_config in db_configs.items():
