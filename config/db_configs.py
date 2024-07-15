@@ -15,6 +15,7 @@ queries = {
     'default': """
     SELECT 
         Rank,
+        uiID1,
         szID1,
         szID2,
         Value1,
@@ -32,6 +33,7 @@ queries = {
     'UAE': """
     SELECT 
         Rank,
+        uiID1,
         szID1,
         szID2,
         Value1,
@@ -49,6 +51,7 @@ queries = {
     'before': """
     SELECT 
         Rank,
+        uiID1,
         szID1,
         szID2,
         Value1,
@@ -66,6 +69,7 @@ queries = {
     'UAE_before': """
     SELECT 
         Rank,
+        uiID1,
         szID1,
         szID2,
         Value1,
