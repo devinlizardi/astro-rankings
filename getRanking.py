@@ -76,6 +76,23 @@ queries = {
         tbluRanking_before
     WHERE 
         Rank BETWEEN 1 AND 26;
+    """,
+    'UAE_before': """
+    SELECT 
+        Rank,
+        szID1,
+        szID2,
+        Value1,
+        'https://static.latale.com/static/v3/web/img/character/character_' + 
+        CASE 
+            WHEN szID2 = 15 THEN '78'
+            ELSE CAST(szID2 AS VARCHAR(10)) 
+        END + 
+        '.png' AS CharacterImageURL
+    FROM 
+        tbluRanking_UAE_before
+    WHERE 
+        Rank BETWEEN 1 AND 26;
     """
 }
 
@@ -146,18 +163,22 @@ def get_ranking():
     all_rankings = {}
     for server, db_config in db_configs.items():
         if server == 'UAE':
-            query = queries['UAE']
+            current_query = queries['UAE']
+            before_query = queries['UAE_before']
         else:
-            query = queries['default']
+            current_query = queries['default']
+            before_query = queries['before']
+
+        # Fetch current rankings
         logging.debug(f"Fetching current rankings for server: {server}")
-        current_rankings = fetch_rankings(db_config, query)
+        current_rankings = fetch_rankings(db_config, current_query)
         logging.debug(f"Current rankings for server {server}: {current_rankings}")
         all_rankings[server] = current_rankings
         print(f"Current rankings for server {server}: {current_rankings}")
 
-        # Fetch the 'before' rankings for each server
+        # Fetch before rankings
         logging.debug(f"Fetching before rankings for server: {server}")
-        before_rankings = fetch_rankings(db_config, queries['before'])
+        before_rankings = fetch_rankings(db_config, before_query)
         logging.debug(f"Before rankings for server {server}: {before_rankings}")
         all_rankings[f"{server}_before"] = before_rankings
         print(f"Before rankings for server {server}: {before_rankings}")
