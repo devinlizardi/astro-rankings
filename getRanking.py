@@ -59,6 +59,23 @@ queries = {
         tbluRanking_UAE
     WHERE 
         Rank BETWEEN 1 AND 26;
+    """,
+    'before': """
+    SELECT 
+        Rank,
+        szID1,
+        szID2,
+        Value1,
+        'https://static.latale.com/static/v3/web/img/character/character_' + 
+        CASE 
+            WHEN szID2 = 15 THEN '78'
+            ELSE CAST(szID2 AS VARCHAR(10)) 
+        END + 
+        '.png' AS CharacterImageURL
+    FROM 
+        tbluRanking_before
+    WHERE 
+        Rank BETWEEN 1 AND 26;
     """
 }
 
@@ -124,7 +141,7 @@ def index():
     return "Welcome to the Ranking API! Use /getRanking to get the rankings."
 
 @app.route('/getRanking', methods=['GET'])
-@cache.cached(timeout=86400)  # Cache this view for 5 minutes set to 24h later 86400
+@cache.cached(timeout=86400)  # Cache this view for 24 hours
 def get_ranking():
     all_rankings = {}
     for server, db_config in db_configs.items():
@@ -136,12 +153,18 @@ def get_ranking():
         rankings = fetch_rankings(db_config, query)
         logging.debug(f"Rankings for server {server}: {rankings}")
         all_rankings[server] = rankings
+        print(f"Rankings for server {server}: {rankings}")
+
+    # Fetching the 'before' rankings
+    before_rankings = fetch_rankings(db_configs['NA'], queries['before'])
+    all_rankings['before'] = before_rankings
+    print(f"Before Rankings: {before_rankings}")
 
     response_json = jsonify(all_rankings)
     response_json.headers.add("Access-Control-Allow-Origin", "*")
     
     # Print the response to the console
-    print(response_json.get_json())
+    print("Final Response:", response_json.get_json())
     logging.debug(f"Response: {response_json.get_json()}")
     
     return response_json
