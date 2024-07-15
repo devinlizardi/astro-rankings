@@ -34,7 +34,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app/
 
 # Set environment variables
-ENV FLASK_APP getRanking.py
+ENV FLASK_APP app.py
 
 # Expose the port that the app runs on
 EXPOSE 5000
