@@ -149,16 +149,18 @@ def get_ranking():
             query = queries['UAE']
         else:
             query = queries['default']
-        logging.debug(f"Fetching rankings for server: {server}")
-        rankings = fetch_rankings(db_config, query)
-        logging.debug(f"Rankings for server {server}: {rankings}")
-        all_rankings[server] = rankings
-        print(f"Rankings for server {server}: {rankings}")
+        logging.debug(f"Fetching current rankings for server: {server}")
+        current_rankings = fetch_rankings(db_config, query)
+        logging.debug(f"Current rankings for server {server}: {current_rankings}")
+        all_rankings[server] = current_rankings
+        print(f"Current rankings for server {server}: {current_rankings}")
 
-    # Fetching the 'before' rankings
-    before_rankings = fetch_rankings(db_configs['NA'], queries['before'])
-    all_rankings['before'] = before_rankings
-    print(f"Before Rankings: {before_rankings}")
+        # Fetch the 'before' rankings for each server
+        logging.debug(f"Fetching before rankings for server: {server}")
+        before_rankings = fetch_rankings(db_config, queries['before'])
+        logging.debug(f"Before rankings for server {server}: {before_rankings}")
+        all_rankings[f"{server}_before"] = before_rankings
+        print(f"Before rankings for server {server}: {before_rankings}")
 
     response_json = jsonify(all_rankings)
     response_json.headers.add("Access-Control-Allow-Origin", "*")
