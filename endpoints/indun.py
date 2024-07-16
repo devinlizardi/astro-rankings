@@ -5,6 +5,7 @@ from config.db_configs import db_configs
 
 indun_bp = Blueprint('indun', __name__)
 
+
 @indun_bp.route('/indun', methods=['GET'])
 def indun():
     char_name = request.args.get('CharName')
@@ -17,17 +18,17 @@ def indun():
         return jsonify({"error": "Invalid region specified"}), 400
 
     try:
-        conn = pyodbc.connect(db_configs[region])
+        conn = pyodbc.connect(str(db_configs[region]))
         cursor = conn.cursor()
         cursor.execute("EXEC RetrieveIndun @CharName = ?", char_name)
-        
+
         columns = [column[0] for column in cursor.description]
         results = []
         for row in cursor.fetchall():
             results.append(dict(zip(columns, row)))
-        
+
         conn.close()
-        
+
         return jsonify(results)
     except pyodbc.Error as e:
         logging.error(f"Error fetching Indun data: {e}")
