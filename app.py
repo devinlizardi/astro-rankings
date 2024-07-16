@@ -29,9 +29,11 @@ app.register_blueprint(webhook_bp)
 app.register_blueprint(get_ranking_bp)
 app.register_blueprint(indun_bp)
 
+
 @app.route('/')
 def index():
     return "Welcome to the Ranking API! Available endpoints: /ping, /webhook, /getRanking, /indun"
+
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
