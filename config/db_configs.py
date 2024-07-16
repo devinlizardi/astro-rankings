@@ -28,7 +28,7 @@ queries = {
     FROM 
         tbluRanking
     WHERE 
-        Rank BETWEEN 1 AND 26;
+        Rank BETWEEN 1 AND 25;
     """,
     'UAE': """
     SELECT 
@@ -46,7 +46,7 @@ queries = {
     FROM 
         tbluRanking_UAE
     WHERE 
-        Rank BETWEEN 1 AND 26;
+        Rank BETWEEN 1 AND 25;
     """,
     'before': """
     SELECT 
@@ -64,7 +64,7 @@ queries = {
     FROM 
         tbluRanking_before
     WHERE 
-        Rank BETWEEN 1 AND 26;
+        Rank BETWEEN 1 AND 25;
     """,
     'UAE_before': """
     SELECT 
@@ -82,7 +82,7 @@ queries = {
     FROM 
         tbluRanking_UAE_before
     WHERE 
-        Rank BETWEEN 1 AND 26;
+        Rank BETWEEN 1 AND 25;
     """
 }
 
