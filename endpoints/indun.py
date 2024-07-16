@@ -8,12 +8,16 @@ indun_bp = Blueprint('indun', __name__)
 @indun_bp.route('/indun', methods=['GET'])
 def indun():
     char_name = request.args.get('CharName')
-    
+    region = request.args.get('region', 'NA')  # Default to 'NA' if region is not specified
+
     if not char_name:
         return jsonify({"error": "CharName parameter is required"}), 400
-    
+
+    if region not in db_configs:
+        return jsonify({"error": "Invalid region specified"}), 400
+
     try:
-        conn = pyodbc.connect(db_configs['NA'])  # Assuming the connection string is same for all, or you can adjust
+        conn = pyodbc.connect(db_configs[region])
         cursor = conn.cursor()
         cursor.execute("EXEC RetrieveIndun @CharName = ?", char_name)
         
