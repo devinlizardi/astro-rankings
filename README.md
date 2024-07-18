@@ -22,8 +22,12 @@ fixing `docker compose up --watch` TKTK
 
 `/getRanking` sends the rankings JSON object
 
-### rankings data-shape
+## data-shape(s)
 
+open data shapes below, try to keep these updated as we expand the API
+
+<details>
+<summary>rankings</summary>
 once the app hits the 4 game server databases you should receive a JSON object with the following shape
 
 ```TypeScript
@@ -59,3 +63,4 @@ e.g.
   }
 ]
 ```
+</details>
