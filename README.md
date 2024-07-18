@@ -4,11 +4,15 @@ A small Flask server that gets rankings for AstroGame.co
 
 ## installation and development
 
-this app uses Docker to build and deploy, and Docker compose for development
+this app uses Docker to build and deploy, run the python script directly to develop locally
 
-it would be faster (and likely easier) to install `requirements.txt` locally on your machine using `pip` to develop, but `compose.yaml` is there just in case as well
+install `requirements.txt` locally on your machine use `pip` to develop
 
-to run use `docker compose up --watch` and see at `http://localhost:8000`
+see at `http://localhost:8000`
+
+**update**
+
+fixing `docker compose up --watch` TKTK
 
 ## endpoints
 
