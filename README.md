@@ -22,6 +22,8 @@ fixing `docker compose up --watch` TKTK
 
 `/getRanking` sends the rankings JSON object
 
+`/indun?CharName={CharName}` gets indun info for the day for all characters on that account
+
 ## data-shape(s)
 
 open data shapes below, try to keep these updated as we expand the API
