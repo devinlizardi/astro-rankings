@@ -66,3 +66,23 @@ e.g.
 ]
 ```
 </details>
+<details>
+  <summary>induns</summary>
+
+    `[
+    {
+    ActivityType: "Dungeon",
+    Count: 1,
+    Difficulty: "No Difficulty Set",
+    Duration: "0 hours 20 minutes 30 seconds ",
+    EntryDate: "Mon, 22 Jul 2024 07:58:07 GMT",
+    ExitDate: "Mon, 22 Jul 2024 08:18:37 GMT",
+    IndunName: "Theater Eugamon (*Lv. 4000+)",
+    ReEnters: 1,
+    charName: "KojinGoji"
+    }
+    ]`
+
+
+
+</details>
