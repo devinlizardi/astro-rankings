@@ -29,7 +29,10 @@ def indun():
 
         conn.close()
 
-        return jsonify(results)
+        response_json = jsonify(results)
+        response_json.headers.add('Access-Control-Allow-Origin', '*')
+
+        return response_json
     except pyodbc.Error as e:
         logging.error(f"Error fetching Indun data: {e}")
         return jsonify({"error": str(e)}), 500
