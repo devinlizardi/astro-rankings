@@ -22,7 +22,7 @@ fixing `docker compose up --watch` TKTK
 
 `/getRanking` sends the rankings JSON object
 
-`/indun?CharName={CharName}` gets indun info for the day for all characters on that account
+`/indun?CharName={CharName}` gets indun info for the day for all characters on that account add `&region={region}` to specify the region, defaults to NA. Regions can be NA/EU/UAE/TH
 
 ## data-shape(s)
 
