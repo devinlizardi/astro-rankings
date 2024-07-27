@@ -41,9 +41,9 @@ def get_ranking():
 
             before_ranking = before_rankings_indexed_by_id[current_ranking.uiID1]
 
-            if current_rank > before_ranking.Rank:
+            if current_rank < before_ranking.Rank:
                 current_ranking.MovementType = MovementType.UP
-            elif current_rank < before_ranking.Rank:
+            elif current_rank > before_ranking.Rank:
                 current_ranking.MovementType = MovementType.DOWN
             else:
                 current_ranking.MovementType = MovementType.UNCHANGED
