@@ -20,17 +20,18 @@ def webhook():
         if not isinstance(custom_fields, list):
             abort(400, 'Missing or incorrect "custom_fields" in checkout session')
 
-        # Define possible keys to look for the dropdown field
-        dropdown_keys = ['region', 'server']
-        dropdown_field = next((field for field in custom_fields if field['key'] in dropdown_keys and 'dropdown' in field), None)
+        # Define possible keys to look for the custom fields
+        account_name_field = next((field for field in custom_fields if field.get('key') == 'Account Name'), None)
+        character_name_field = next((field for field in custom_fields if field.get('key') == 'Character Name'), None)
 
-        # Extract the dropdown value if the correct structure is found
-        if dropdown_field and 'value' in dropdown_field['dropdown']:
-            dropdown_value = dropdown_field['dropdown']['value']
-        else:
-            dropdown_value = 'Dropdown value not specified or incorrectly structured'
+        # Extract the values of the custom fields if they are present
+        account_name = account_name_field.get('value') if account_name_field else 'Account Name not specified'
+        character_name = character_name_field.get('value') if character_name_field else 'Character Name not specified'
 
-        return jsonify({'dropdown_value': dropdown_value})
+        return jsonify({
+            'account_name': account_name,
+            'character_name': character_name
+        })
     
     except KeyError as e:
         logging.error(f"Key error in processing the webhook: {str(e)}")
