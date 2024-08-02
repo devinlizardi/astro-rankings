@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, abort
 import logging
+webhook_bp = Blueprint('webhook', __name__)
 
 SECRET = "dsadasxcfe3e32ezaxdsad3aSG"
 
