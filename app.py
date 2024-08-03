@@ -19,20 +19,20 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %
 
 # Import endpoints
 from endpoints.ping import ping_bp
-from endpoints.webhook import webhook_bp
+from endpoints.addCash import addCash_bp
 from endpoints.get_ranking import get_ranking_bp
 from endpoints.indun import indun_bp
 
 # Register blueprints
 app.register_blueprint(ping_bp)
-app.register_blueprint(webhook_bp)
+app.register_blueprint(addCash_bp)
 app.register_blueprint(get_ranking_bp)
 app.register_blueprint(indun_bp)
 
 
 @app.route('/')
 def index():
-    return "Welcome to the Ranking API! Available endpoints: /ping, /webhook, /getRanking, /indun"
+    return "Welcome to the Ranking API! Available endpoints: /ping, /addCash, /getRanking, /indun"
 
 
 if __name__ == '__main__':
