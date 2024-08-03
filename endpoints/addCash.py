@@ -20,7 +20,7 @@ def add_cash():
     if server == 'NA':
        connection_string = f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={os.getenv('NA_DB_SERVER')};DATABASE={os.getenv('NA_DB_CASH_DATABASE')};UID={os.getenv('NA_DB_UID')};PWD={os.getenv('NA_DB_PASSWORD')}"
     elif server == 'UAE':
-        connection_string = f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={os.getenv('UAE_DB_SERVER')};DATABASE={os.getenv('UAE_DB_CASH_DATABASE')};UID={os.getenv('UAE_DB_UID')};PWD={os.getenv('UAE_DB_PASSWORD')}
+        connection_string = f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={os.getenv('UAE_DB_SERVER')};DATABASE={os.getenv('UAE_DB_CASH_DATABASE')};UID={os.getenv('UAE_DB_UID')};PWD={os.getenv('UAE_DB_PASSWORD')}"
     else:
         return jsonify({'error': 'Invalid server selection'}), 400
 
