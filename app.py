@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from dotenv import load_dotenv
 import logging
 import os
@@ -7,6 +8,8 @@ import os
 load_dotenv()
 
 app = Flask(__name__)
+# Enable CORS for all routes
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Import cache and configure it
 from config import cache
