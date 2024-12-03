@@ -4,5 +4,4 @@ services:
     ports:
       - "8000:5000"
     env_file:
-      - path: ./.env
-        required: false
+      - .env
