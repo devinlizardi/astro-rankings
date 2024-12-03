@@ -30,9 +30,6 @@ def indun():
         conn.close()
 
         response_json = jsonify(results)
-        response_json.headers.add('Access-Control-Allow-Origin', '*')
-        response_json.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-        response_json.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
 
         return response_json
     except pyodbc.Error as e:
