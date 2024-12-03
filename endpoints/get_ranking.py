@@ -52,7 +52,6 @@ def get_ranking():
         all_rankings[f'{server}_before'] = before_rankings
 
     response_json = jsonify(all_rankings)
-    response_json.headers.add("Access-Control-Allow-Origin", "*")
 
     # Print the response to the console
     print("Final Response:", response_json.get_json())
